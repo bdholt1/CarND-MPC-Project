@@ -2,6 +2,49 @@
 Self-Driving Car Engineer Nanodegree Program
 
 ---
+## Model
+
+The vehicle state is modeled through 4 parameters: [x, y, psi, v].  These correspond to position in the vehicle coordinate system, orientation with respect to the reference trajectory and velocity.
+The actuators are modeled with 2 parameters: [delta, a]. Here, delta is the steering angle and a single actuator a models the throttle which can go forward and backward (accelerator and brake).
+
+The vehicle's motion is modeled with a kinematic model using the following equations provided from the classroom:
+
+`x_[t+1] = x[t] + v[t] * cos(psi[t]) * dt`
+
+`y_[t+1] = y[t] + v[t] * sin(psi[t]) * dt`
+
+`psi_[t+1] = psi[t] + v[t] / Lf * delta[t] * dt`
+
+`v_[t+1] = v[t] + a[t] * dt`
+
+Additionally, the cross track error (CTE) and orientation error (EPSI) are calculated as follows:
+
+`cte[t+1] = f(x[t]) - y[t] + v[t] * sin(epsi[t]) * dt`
+
+`epsi[t+1] = psi[t] - psides[t] + v[t] * delta[t] / Lf * dt`
+
+## Timestep and Duration
+
+N is the number of timesteps that the predictive controller forecasts into the future, and dt is the elapsed duration between each timestep. The product of the two is the total duration in the future that the controller is able to model.  If N is large then the solver has a more complex model to solve and it will take longer or in certain cases not converge to a solution. If dt is too small then the total duration of prediction will be small and possibly not long enough to estimate a good trajectory and controls, and if it's too long then it may make predictions into the future that are no longer valid if for example the vehicle is turning.
+
+My approach was to fix the horizon (total duration) to 2.5 seconds (the classroom suggests between 2 and 3 seconds should be good) and then to adjust N and dt accordingly.  In the end I found that N=10 and dt=2.5 was a good compromise that yieled the best results.
+
+## Polynomial Fitting
+
+The waypoints are provided in map coordinates which makes it challenging to fit a polynomial and to work out the optimal actuations. A transform is done to convert to the map coordinate system and then to rotate 90 degrees before fitting a 3rd degree polynomial to the transformed points.  Once the polynomial is fitted, we can visualise it in the vehicle coordinate system (the yellow line).
+
+The polynomial is provided to the Model Predictive Controller along with the delayed state to estimate the best actuations to apply.
+
+
+## Latency
+
+The latency between providing an actuation and it being applied needs to be accounted for in some way. For MPC this is handled by applying the global kinematic motion model to the initial state of the for the duration of the expected latency to estimate the state of the vehicle at the point at which the actuation should be applied.  This delayed state is then used as the input to the Model Predictive Controller and the resulting actuations (steering and throttle) account for the latency. 
+
+## Discussion
+
+I had a lot of trouble getting the system to behave in terms of stability. The reference trajectory in particular keeps jumping around and although the MPC trajectory follows it, there is clearly room for improvement to make this smoother.
+
+---
 
 ## Dependencies
 
