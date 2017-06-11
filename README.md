@@ -42,7 +42,7 @@ The latency between providing an actuation and it being applied needs to be acco
 
 ## Discussion
 
-I had a lot of trouble getting the system to behave in terms of stability. The reference trajectory in particular keeps jumping around and although the MPC trajectory follows it, there is clearly room for improvement to make this smoother.
+The vehicle can navigate the track at 40mph but when I increase the reference velocity the vehicle very quickly goes off track to instability.
 
 ---
 
