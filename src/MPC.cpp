@@ -6,7 +6,7 @@
 using CppAD::AD;
 
 // N is the number of predictions
-const size_t N = 9;
+const size_t N = 10;
 // dt is the time step between each prediction point, meaning that the total
 // prediction time is N*dt
 const double dt = 0.25;

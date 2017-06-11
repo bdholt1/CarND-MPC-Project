@@ -130,11 +130,11 @@ int main() {
 
           for (int i = 0; i < ptsx.size(); ++i) {
             // convert from map to car coordinate system
-            double dx = ptsx[i] - px;
-            double dy = ptsy[i] - py;
+            double dx = ptsx[i] - delayed_px;
+            double dy = ptsy[i] - delayed_py;
             
-            ptsx[i] = dx*cos(-psi) - dy*sin(-psi);
-            ptsy[i] = dx*sin(-psi) + dy*cos(-psi);
+            ptsx[i] = dx*cos(-delayed_psi) - dy*sin(-delayed_psi);
+            ptsy[i] = dx*sin(-delayed_psi) + dy*cos(-delayed_psi);
           }
                    
           Eigen::Map<Eigen::VectorXd> ptsx_transform(&ptsx[0], 6);
@@ -145,7 +145,7 @@ int main() {
           cout << "CTE = " << cte << ", EPSI = " << epsi << endl;
 
           Eigen::VectorXd state(6);
-          state << 0, 0, 0, v, cte, epsi;
+          state << 0, 0, 0, delayed_v, cte, epsi;
 
           vector<double> vars = mpc.Solve(state, coeffs);
           double steer_value = vars[0] / (deg2rad(25)*Lf);
