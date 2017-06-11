@@ -80,7 +80,7 @@ Eigen::VectorXd apply_latency(Eigen::VectorXd& x0, double delta, double a, doubl
   Eigen::VectorXd state(4);
   state(0) = x + v*cos(psi)*dt; 
   state(1) = y + v*sin(psi)*dt;
-  state(2) = psi + v/Lf*delta*dt;
+  state(2) = psi - v/Lf*delta*dt;
   state(3) = v + a*dt;
   //cout << "state after accounting for latency " << state << endl;
   return state;

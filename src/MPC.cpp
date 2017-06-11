@@ -30,12 +30,12 @@ const size_t epsi_start = cte_start + N;
 const size_t delta_start = epsi_start + N;
 const size_t a_start = delta_start + N - 1;
 
-const double l_cte = 2.0;
-const double l_epsi = 3.0;
-const double l_v = 0.5;
-const double l_delta = 150.0;
-const double l_a = 0.2;
-const double l_deltadiff = 20.0;
+const double l_cte = 10;
+const double l_epsi = 20;
+const double l_v = 1.0;
+const double l_delta = 200.0;
+const double l_a = 1.0;
+const double l_deltadiff = 200.0;
 const double l_adiff = 50.0;
 
 class FG_eval {
